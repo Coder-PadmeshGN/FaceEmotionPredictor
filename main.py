@@ -4,7 +4,6 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
-from werkzeug.utils import secure_filename
 import os
 app = Flask(__name__)
 @app.route("/")
@@ -20,7 +19,6 @@ def upload():
         ENDPOINT = "https://facialemotion1.cognitiveservices.azure.com//face/v1.0/detect"
         face_client = FaceClient(ENDPOINT, CognitiveServicesCredentials(KEY))
         test_image_array=upload_image
-        #single_image_name = os.path.basename(upload_image)
         headers = {'Content-Type': 'application/octet-stream','Ocp-Apim-Subscription-Key': KEY}
         params = {'returnFaceId': 'true','returnFaceLandmarks': 'true','returnFaceAttributes': 'age,gender,headPose,smile,facialHair,glasses,emotion'}
         response= requests.post(ENDPOINT, params=params, headers=headers, data=test_image_array)
@@ -35,7 +33,6 @@ def upload():
             result = "The emotion of the person is : "+keys[values.index(maximum)]
     return render_template("Name.html", result=result)
 
-    return render_template("Upload.html")
 
 @app.route("/Upload")
 def back():
